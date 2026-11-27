@@ -12,6 +12,8 @@ import tempfile
 import urllib.request
 import urllib.parse
 import zipfile
+import time
+import urllib.error
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MAX_IPA = 600 * 1024 * 1024
@@ -52,14 +54,14 @@ def choose_asset(project, release):
         raise ValueError(f'Expected one approved IPA variant, got {len(assets)}')
     asset = assets[0]
     u = urllib.parse.urlsplit(asset['browser_download_url'])
-    if u.scheme != 'https' or u.netloc != 'github.com' or not u.path.startswith('/' + project['repo'] + '/releases/download/'):
+    if u.scheme != 'https' or u.netloc != 'github.com' or not u.path.startswith('/' + project.get('asset_repo', project['repo']) + '/releases/download/'):
         raise ValueError('Asset is not hosted under the approved project')
     if not 0 < asset['size'] <= MAX_IPA:
         raise ValueError('Invalid IPA size')
     return asset
 
 
-def download(asset, target):
+def download_once(asset, target):
     sha = hashlib.sha256()
     count = 0
     request = urllib.request.Request(asset['browser_download_url'], headers={'User-Agent':'personal-altstore-source'})
@@ -79,6 +81,18 @@ def download(asset, target):
     if asset.get('digest') and asset['digest'] != digest:
         raise ValueError('GitHub asset digest mismatch')
     return digest
+
+
+def download(asset, target):
+    for attempt in range(3):
+        try:
+            return download_once(asset, target)
+        except (OSError, ValueError) as exc:
+            if isinstance(exc, urllib.error.HTTPError) and exc.code in (400, 401, 403, 404, 410):
+                raise
+            if attempt == 2:
+                raise
+            time.sleep(2 ** attempt)
 
 
 def plist_from_zip(z, name):
@@ -146,7 +160,7 @@ def app_from_ipa(project, release, asset, info, permissions, digest):
 
 def news_item(project, release):
     tag = release['tag_name']
-    caption = ('New upstream release. Open GitHub to review the changes.' if project['mode'] in ('ipa','feed')
+    caption = ('New upstream release. Open GitHub to review the changes.' if project['mode'] in ('ipa','feed','facebook_mirror')
                else 'New tweak release. Open GitHub to build your own IPA; no public IPA is supplied here.')
     return {'title': f"{project['name']}: {tag}"[:150],
             'identifier': project['id'] + '-' + str(release['id']), 'caption': caption,
@@ -206,6 +220,84 @@ def get_feed(project):
     return feed_asset(project,json.loads(data))
 
 
+def facebook_candidates(project):
+    # The aggregator is used only as an index for the same IPA Vault publisher.
+    # No arbitrary bundle-ID matching, unrelated tweaks, or arbitrary hosts.
+    req = urllib.request.Request(project['feed'], headers={'User-Agent':'personal-altstore-source'})
+    with urllib.request.urlopen(req, timeout=60) as response:
+        if urllib.parse.urlsplit(response.geturl()).netloc != 'fastsign.dev':
+            raise ValueError('Unexpected mirror feed redirect')
+        raw = response.read(100*1024*1024+1)
+    if len(raw)>100*1024*1024: raise ValueError('Mirror feed too large')
+    return facebook_entries(project,json.loads(raw))
+
+
+def facebook_entries(project, data):
+    candidates=[]
+    for a in data['apps']:
+        if a.get('bundleIdentifier') != project['bundle_id']: continue
+        name=a.get('name','')
+        if not re.fullmatch(r'Facebook(?: \(Facebook Plus\)| \(Plus [0-9.]+\)| Plus(?: [0-9.]+)?)',name,re.I): continue
+        for v in a.get('versions') or [a]:
+            description=' '.join(str(x) for x in (a.get('developerName',''),a.get('localizedDescription',''),v.get('localizedDescription',''),v.get('versionDescription',''))).lower()
+            if 'ipavault' not in description and 'ipa vault' not in description: continue
+            url=v.get('downloadURL',''); u=urllib.parse.urlsplit(url)
+            # Retain the original publisher's storage host, rather than trusting an opaque mirror.
+            if u.scheme != 'https' or u.netloc != project['asset_host'] or u.query or u.fragment: continue
+            path=urllib.parse.unquote(u.path)
+            if not re.fullmatch(r'/[^/]*facebook[^/]*\.ipa',path,re.I) or 'plus' not in path.lower(): continue
+            try:
+                row={**a, 'versions':[v]}
+                rule={**project,'feed_name':name,'asset_path_regex':re.escape(u.path)}
+                release,asset=feed_asset(rule,{'apps':[row]})
+                candidates.append((release,asset))
+            except (ValueError,KeyError,TypeError): continue
+    candidates.sort(key=lambda x:x[0]['published_at'],reverse=True)
+    unique=[]; seen=set()
+    for r,a in candidates:
+        if a['browser_download_url'] not in seen:
+            unique.append((r,a)); seen.add(a['browser_download_url'])
+    if not unique: raise ValueError('No matching IPA Vault Facebook Plus file on approved host in mirror index')
+    return unique[:4]
+
+
+def provider_candidates(p):
+    if p['mode']=='facebook_mirror': return facebook_candidates(p)
+    if p['mode']=='feed': return [get_feed(p)]
+    release=get_release(p.get('asset_repo',p['repo']))
+    return [(release,choose_asset(p,release))]
+
+
+def resolve_project(p, previous, old_identity, allow_community):
+    errors=[]
+    for provider in [p]+[{**p,**f} for f in p.get('fallbacks',[])]:
+        if provider.get('community') and not allow_community: continue
+        try:
+            candidates=provider_candidates(provider)
+        except Exception as exc:
+            errors.append(f"{provider.get('publisher',provider['repo'])}: {exc}")
+            continue
+        for release,asset in candidates:
+            try:
+                identity=[provider['repo'],release['id'],asset['id'],asset.get('digest'),asset['size'],asset.get('updated_at'),provider['bundle_id'],asset['browser_download_url']]
+                if previous and old_identity==identity:
+                    # A previously inspected URL is reused, but confirm it still serves data.
+                    probe=urllib.request.Request(asset['browser_download_url'],headers={'User-Agent':'personal-altstore-source','Range':'bytes=0-3'})
+                    with urllib.request.urlopen(probe,timeout=35) as response:
+                        if response.read(4)!=b'PK\x03\x04': raise ValueError('Previously indexed IPA is no longer downloadable')
+                    app=previous
+                else:
+                    with tempfile.TemporaryDirectory() as tmp:
+                        ipa=pathlib.Path(tmp)/'app.ipa'
+                        digest=download(asset,ipa)
+                        info,permissions=inspect_ipa(ipa)
+                        app=app_from_ipa(provider,release,{**asset,'size':ipa.stat().st_size},info,permissions,digest)
+                return provider,release,app,identity,errors
+            except Exception as exc:
+                errors.append(f"{provider.get('publisher',provider['repo'])}: {exc}")
+    raise ValueError('; '.join(errors) or 'No approved providers enabled')
+
+
 def main():
     projects = load('projects.json')
     settings = load('settings.json', {'include_community':False})
@@ -226,32 +318,23 @@ def main():
                 item=news_item({**p,'mode':'watch'},release)
                 news[item['identifier']]=item
                 status.append(row); print(p['name'],row['status']); continue
-            if p['mode']=='feed':
-                release,asset = get_feed(p)
-            else:
-                release = get_release(p['repo'])
-                asset = choose_asset(p,release)
-            row.update(tag=release['tag_name'],mode=p['mode'])
-            identity = [p['repo'], release['id'], asset['id'], asset.get('digest'), asset['size'], asset.get('updated_at'), p['bundle_id'],asset['browser_download_url']]
             previous = old_apps.get(p['bundle_id'])
-            if previous and cache.get(p['id']) == identity:
-                app=previous
-            else:
-                with tempfile.TemporaryDirectory() as tmp:
-                    ipa = pathlib.Path(tmp) / 'app.ipa'
-                    digest = download(asset, ipa)
-                    info, permissions = inspect_ipa(ipa)
-                    app = app_from_ipa(p, release, {**asset,'size':ipa.stat().st_size}, info, permissions, digest)
+            p_used, release, app, identity, attempts = resolve_project(p,previous,cache.get(p['id']),settings.get('include_community') is True)
+            row.update(tag=release['tag_name'],mode=p_used['mode'],publisher=p_used.get('publisher',p_used['repo']))
+            if attempts: row['fallback_reason']='; '.join(attempts)[:1000]
             apps.append(app); next_cache[p['id']]=identity
             row['status']='IPA listed; metadata inspected, not security audited'
             item=news_item(p,release)
-            if p['mode']=='feed':
-                item['url']=p['feed']; item['caption']='New build indexed from '+p['publisher']+'. Review source and permissions before installing.'
+            if p_used['mode'] in ('feed','facebook_mirror'):
+                item['url']=p_used['feed']; item['caption']='New build indexed from '+p_used['publisher']+'. Review source and permissions before installing.'
+            if p_used.get('asset_repo'):
+                item['url']=f"https://github.com/{p_used['asset_repo']}/releases/tag/{urllib.parse.quote(release['tag_name'],safe='')}"
+                item['caption']='Community build indexed from '+p_used['publisher']+'. Review before installing.'
             news[item['identifier']]=item
             if previous and previous['versions'][0]['version'] == app['versions'][0]['version'] and previous['versions'][0]['buildVersion'] == app['versions'][0]['buildVersion'] and cache.get(p['id']) != identity:
                 row['note']='Same version/build: AltStore may not offer Update. Check News.'
         except Exception as exc:
-            row['status']='Check failed: '+str(exc)[:350]
+            row['status']='Check failed: '+str(exc)[:1500]
             if enabled and p['bundle_id'] in old_apps and cache.get(p['id']):
                 apps.append(old_apps[p['bundle_id']]); next_cache[p['id']]=cache[p['id']]
                 row['note']='Previous validated listing retained; may be stale. New asset not published.'

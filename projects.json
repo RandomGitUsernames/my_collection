@@ -20,7 +20,15 @@
     "category": "social",
     "publisher": "IPA Vault",
     "asset_host": "pub-dd800571175348b6a2745b3396360028.r2.dev",
-    "asset_path_regex": "/Facebook%20Plus%20[^/]+\\.ipa"
+    "asset_path_regex": "/Facebook%20Plus%20[^/]+\\.ipa",
+    "fallbacks": [
+      {
+        "mode": "facebook_mirror",
+        "publisher": "IPA Vault (indexed by FastSign)",
+        "feed": "https://fastsign.dev/repo.json",
+        "community": true
+      }
+    ]
   },
   {
     "id": "ytmusicultimate",
@@ -47,7 +55,16 @@
     "category": "entertainment",
     "publisher": "SideloadLabs (Catbox hosted)",
     "asset_host": "files.catbox.moe",
-    "asset_path_regex": "/[A-Za-z0-9]+\\.ipa"
+    "asset_path_regex": "/[A-Za-z0-9]+\\.ipa",
+    "fallbacks": [
+      {
+        "mode": "ipa",
+        "asset_repo": "estrogencat/EeveeIPA",
+        "asset_regex": "(?i)^EeveeSpotify-[0-9.]+-ESR-[0-9.]+\\.ipa$",
+        "publisher": "estrogencat/EeveeIPA (community build)",
+        "community": true
+      }
+    ]
   },
   {
     "id": "livecontainer",
