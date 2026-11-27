@@ -67,11 +67,11 @@
       "versions": [
         {
           "version": "588.1.0",
-          "buildVersion": "1119078848",
-          "date": "2026-11-27T10:01:22Z",
-          "downloadURL": "https://github.com/RandomGitUsernames/my_collection/releases/download/approved-80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b/Facebook-Plus-no-extensions.ipa",
-          "size": 228773745,
-          "localizedDescription": "Experimental Aggressively Hide Reels switch; static checks passed. No app extensions. Device behavior unverified. SHA-256: 80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b",
+          "buildVersion": "1119078849",
+          "date": "2026-11-27T10:29:07Z",
+          "downloadURL": "https://github.com/RandomGitUsernames/my_collection/releases/download/approved-c63c12da5b42c0421b5268bc756bcfb0dfb12a942e941356e495fe0f2492db9f/Facebook-Plus-no-extensions.ipa",
+          "size": 228798340,
+          "localizedDescription": "Experimental combined features: model-level Reels removal without black overlay, optional feed/navigation controls, media saving, scroll restoration, conditional autoplay and comments controls. Static checks only; device support varies. No app extensions. Auto-source: 726d4908e9894829f71fadf5006235a5bfdf1df2; Auto-patch: 101c49ae210764c66cbc12cfdecc3ec8265d9872d756d2511e0a56a06f2287f4. SHA-256: c63c12da5b42c0421b5268bc756bcfb0dfb12a942e941356e495fe0f2492db9f",
           "minOSVersion": "15.1"
         }
       ],
@@ -274,6 +274,15 @@
     }
   ],
   "news": [
+    {
+      "title": "Facebook Plus: 588.1.0",
+      "identifier": "facebook-plus-approved-c63c12da5b42c0421b5268bc756bcfb0dfb12a942e941356e495fe0f2492db9f",
+      "caption": "Reviewed self-built IPA with extensions removed. If the same version is installed, AltStore may not offer Update.",
+      "date": "2026-11-27T10:29:07Z",
+      "notify": true,
+      "url": "https://github.com/RandomGitUsernames/my_collection/releases/tag/approved-c63c12da5b42c0421b5268bc756bcfb0dfb12a942e941356e495fe0f2492db9f",
+      "appID": "com.facebook.Facebook"
+    },
     {
       "title": "Facebook Plus: 588.1.0",
       "identifier": "facebook-plus-approved-80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b",
