@@ -115,6 +115,7 @@
           "NSFaceIDUsageDescription": "Enable Face ID for quick and secure authentication on Facebook.",
           "NSLocalNetworkUsageDescription": "Facebook uses your local network so you can do things like find and connect to devices and cast videos to TV.",
           "NSLocationAlwaysAndWhenInUseUsageDescription": "Facebook uses this to provide more relevant and personalized experiences, like helping you check-in, find local events and get better ads.",
+          "NSLocationTemporaryUsageDescriptionDictionary": "DefaultUsageDescription: Facebook uses this to provide more relevant and personalized experiences, like helping you check-in, find local events and get better ads.",
           "NSLocationWhenInUseUsageDescription": "Facebook uses this to provide more relevant and personalized experiences, like helping you check-in, find local events and get better ads.",
           "NSMicrophoneUsageDescription": "Facebook uses access to your microphone to do things like help you record audio, identify songs, search with your voice and use audio effects.\n\nYou can always change this in your device settings.",
           "NSMotionUsageDescription": "Facebook uses this to provide more relevant and personalized experiences.",
@@ -122,8 +123,7 @@
           "NSPhotoLibraryUsageDescription": "Facebook uses access to your photos to do things like help you share and apply visual effects to your photos and videos, and to suggest photos and videos to share.",
           "NSSiriUsageDescription": "This will let Siri help you look for photos on Facebook",
           "NSSpeechRecognitionUsageDescription": "Facebook will use speech recognition to detect your confirmation.",
-          "NSUserTrackingUsageDescription": "This helps Facebook personalize ads we show you.",
-          "NSLocationTemporaryUsageDescriptionDictionary": "Facebook may request temporary access to precise location for location-related features, subject to your iOS location permission settings."
+          "NSUserTrackingUsageDescription": "This helps Facebook personalize ads we show you."
         }
       }
     },
