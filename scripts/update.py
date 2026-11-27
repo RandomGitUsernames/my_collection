@@ -315,6 +315,15 @@ def main():
         row = {'project': p['name'], 'repo': p['repo'], 'publisher':p.get('publisher',p['repo'])}
         release = None
         enabled = not p.get('community') or settings.get('include_community') is True
+        if p.get('review_hold'):
+            row['status'] = 'Security review hold; no new community IPA accepted'
+            previous = old_apps.get(p['bundle_id'])
+            if enabled and previous:
+                apps.append(previous)
+                if p['id'] in cache:
+                    next_cache[p['id']] = cache[p['id']]
+                row['note'] = 'Existing listing remains unverified; remote bytes are not guaranteed immutable. No new version indexed.'
+            status.append(row); print(p['name'], row['status']); continue
         try:
             if not enabled:
                 release = get_release(p['repo'])

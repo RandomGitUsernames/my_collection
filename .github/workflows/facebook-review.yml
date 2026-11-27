@@ -1,0 +1,31 @@
+name: Facebook Plus upstream review monitor
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 9 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/facebook-review.yml'
+      - 'scripts/facebook_review.py'
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: facebook-review-monitor
+  cancel-in-progress: false
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Compile review script
+        run: python3 -m py_compile scripts/facebook_review.py
+      - name: Inspect upstream as data only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVIEW_REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/facebook_review.py

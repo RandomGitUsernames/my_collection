@@ -29,7 +29,8 @@
         "community": true,
         "mirror_asset_host": "fastsign.dev"
       }
-    ]
+    ],
+    "review_hold": true
   },
   {
     "id": "ytmusicultimate",
