@@ -1,0 +1,40 @@
+name: Update AltStore source
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['projects.json', 'scripts/**', 'tests/**', '.github/workflows/update.yml']
+  schedule:
+    - cron: '23 9 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: source-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Test generator
+        run: python3 -m unittest discover -s tests -v
+      - name: Check approved projects
+        id: scan
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/update.py
+      - name: Publish validated JSON
+        run: |
+          python3 -c 'from scripts.update import load,validate; validate(load("source.json"))'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add source.json status.json asset-cache.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh upstream release index'
+            git push
+          fi
+      - name: Flag failed checks
+        if: steps.scan.outcome == 'failure'
+        run: exit 1
