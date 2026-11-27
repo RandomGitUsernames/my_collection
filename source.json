@@ -67,11 +67,11 @@
       "versions": [
         {
           "version": "588.1.0",
-          "buildVersion": "1119078847",
-          "date": "2026-11-27T09:42:10Z",
-          "downloadURL": "https://github.com/RandomGitUsernames/my_collection/releases/download/approved-0515afa8f918bb34bf56b91bab691f0196a1112d81664c0a5cacce50703c2d12/Facebook-Plus-no-extensions.ipa",
-          "size": 228769391,
-          "localizedDescription": "Reviewed self-built IPA; no app extensions. SHA-256: 0515afa8f918bb34bf56b91bab691f0196a1112d81664c0a5cacce50703c2d12",
+          "buildVersion": "1119078848",
+          "date": "2026-11-27T10:01:22Z",
+          "downloadURL": "https://github.com/RandomGitUsernames/my_collection/releases/download/approved-80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b/Facebook-Plus-no-extensions.ipa",
+          "size": 228773745,
+          "localizedDescription": "Experimental Aggressively Hide Reels switch; static checks passed. No app extensions. Device behavior unverified. SHA-256: 80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b",
           "minOSVersion": "15.1"
         }
       ],
@@ -273,6 +273,15 @@
     }
   ],
   "news": [
+    {
+      "title": "Facebook Plus: 588.1.0",
+      "identifier": "facebook-plus-approved-80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b",
+      "caption": "Reviewed self-built IPA with extensions removed. If the same version is installed, AltStore may not offer Update.",
+      "date": "2026-11-27T10:01:22Z",
+      "notify": true,
+      "url": "https://github.com/RandomGitUsernames/my_collection/releases/tag/approved-80f743f94d606cc14b12a6c102e09b25c66c0962e8d6068d521317771c11c68b",
+      "appID": "com.facebook.Facebook"
+    },
     {
       "title": "Facebook Plus: 588.1.0",
       "identifier": "facebook-plus-approved-0515afa8f918bb34bf56b91bab691f0196a1112d81664c0a5cacce50703c2d12",
