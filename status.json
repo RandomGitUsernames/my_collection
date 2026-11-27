@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-27T08:25:10.801698+00:00",
+  "checked_at": "2026-11-27T08:42:09.689710+00:00",
   "projects": [
     {
       "project": "YouMod",
@@ -12,11 +12,9 @@
     {
       "project": "Facebook Plus",
       "repo": "shajon-dev/Facebook-Plus",
-      "publisher": "IPA Vault (FastSign mirror)",
-      "tag": "588.1.0",
-      "mode": "facebook_mirror",
-      "fallback_reason": "IPA Vault: HTTP Error 404: Not Found",
-      "status": "IPA listed; metadata inspected, not security audited"
+      "publisher": "IPA Vault",
+      "status": "Security review hold; no new community IPA accepted",
+      "note": "Existing listing remains unverified; remote bytes are not guaranteed immutable. No new version indexed."
     },
     {
       "project": "YTMusicUltimate",
