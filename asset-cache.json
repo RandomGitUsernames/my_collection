@@ -19,6 +19,16 @@
     "com.google.ios.youtubemusic",
     "https://github.com/mrdrvt99/YTMusicUltimate/releases/download/ytmu-ipa46/YTMusicUltimate_9.47.2_2.4.1.ipa"
   ],
+  "eeveespotify": [
+    "SideloadLabs/EeveeSpotifyReincarnated",
+    458248748,
+    791933999,
+    "sha256:d4596b5cec8948907ffbd020f5c704bbd9106ab7fdfc58cae9058a3cba04a7ca",
+    133116650,
+    "2026-11-25T14:45:12Z",
+    "com.spotify.client",
+    "https://github.com/estrogencat/EeveeIPA/releases/download/7.5.0-2026-11-25-14-40-20/EeveeSpotify-9.2.2-ESR-7.5.0.ipa"
+  ],
   "livecontainer": [
     "LiveContainer/LiveContainer",
     348463764,

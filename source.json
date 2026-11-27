@@ -90,6 +90,53 @@
       }
     },
     {
+      "name": "EeveeSpotify Reincarnated",
+      "bundleIdentifier": "com.spotify.client",
+      "developerName": "estrogencat/EeveeIPA (community build)",
+      "localizedDescription": "Original project: https://github.com/SideloadLabs/EeveeSpotifyReincarnated. Binary provider: estrogencat/EeveeIPA (community build). Community-packaged IPA, not an original developer build. Not independently security audited.",
+      "iconURL": "https://github.com/SideloadLabs.png",
+      "category": "entertainment",
+      "versions": [
+        {
+          "version": "9.2.2",
+          "buildVersion": "920202587",
+          "date": "2026-11-25T14:45:19Z",
+          "downloadURL": "https://github.com/estrogencat/EeveeIPA/releases/download/7.5.0-2026-11-25-14-40-20/EeveeSpotify-9.2.2-ESR-7.5.0.ipa",
+          "size": 133116650,
+          "localizedDescription": "Upstream release 7.5.0-2026-11-25-14-40-20. SHA-256: d4596b5cec8948907ffbd020f5c704bbd9106ab7fdfc58cae9058a3cba04a7ca",
+          "minOSVersion": "15.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "application-identifier",
+          "com.apple.developer.game-center",
+          "com.apple.developer.team-identifier",
+          "com.apple.security.application-groups",
+          "get-task-allow",
+          "keychain-access-groups"
+        ],
+        "privacy": {
+          "NSAppleMusicUsageDescription": "This will let you play your imported music on Spotify.",
+          "NSBluetoothAlwaysUsageDescription": "This lets you unlock new ways of interacting with other devices compatible with Spotify via Bluetooth.",
+          "NSCalendarsUsageDescription": "This lets Spotify view and add events to your calendar.",
+          "NSCalendarsWriteOnlyAccessUsageDescription": "This lets Spotify add events to your calendar.",
+          "NSCameraUsageDescription": "This lets you use your camera to scan or upload images.",
+          "NSContactsUsageDescription": "This lets Spotify access calendars you may have shared with your contacts.",
+          "NSFaceIDUsageDescription": "This lets you set access restrictions using Face ID.",
+          "NSHealthShareUsageDescription": "Spotify will use HealthKit data to provide personalised audio recommendations for your workouts.",
+          "NSHealthUpdateUsageDescription": "Spotify will use HealthKit data to provide personalised audio recommendations for your workouts.",
+          "NSLocalNetworkUsageDescription": "This lets you listen on different devices. Spotify will also get access to local audio files.",
+          "NSLocationWhenInUseUsageDescription": "Your location is used to improve your recommendations and experience on Spotify.",
+          "NSMicrophoneUsageDescription": "This lets you control Spotify using your voice.",
+          "NSMotionUsageDescription": "We will use this to understand which audio motivates you most.",
+          "NSPhotoLibraryAddUsageDescription": "This lets you save images to your Photo Library.",
+          "NSPhotoLibraryUsageDescription": "This lets you select images from your Photo Library.",
+          "NSUserTrackingUsageDescription": "Your data will be used to deliver personalized ads or content to you."
+        }
+      }
+    },
+    {
       "name": "LiveContainer",
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "LiveContainer",
@@ -164,6 +211,14 @@
       "date": "2026-11-26T15:55:36Z",
       "notify": true,
       "url": "https://github.com/shajon-dev/Facebook-Plus/releases/tag/v1.1.1"
+    },
+    {
+      "title": "EeveeSpotify Reincarnated: 7.5.0-2026-11-25-14-40-20",
+      "identifier": "eeveespotify-458248748",
+      "caption": "Community build indexed from estrogencat/EeveeIPA (community build). Review before installing.",
+      "date": "2026-11-25T14:45:19Z",
+      "notify": true,
+      "url": "https://github.com/estrogencat/EeveeIPA/releases/tag/7.5.0-2026-11-25-14-40-20"
     },
     {
       "title": "YTMusicUltimate: 9.47.2",
