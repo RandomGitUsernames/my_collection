@@ -1,6 +1,61 @@
 [
-  {"id":"youmod","name":"YouMod","repo":"jaydenjcpy/YouMod","mode":"ipa","asset_regex":"(?i)^YouMod[_-].*\\.ipa$","bundle_id":"com.google.ios.youtube","category":"entertainment"},
-  {"id":"facebook-plus","name":"Facebook Plus","repo":"shajon-dev/Facebook-Plus","mode":"watch"},
-  {"id":"ytmusicultimate","name":"YTMusicUltimate","repo":"dayanch96/YTMusicUltimate","mode":"watch"},
-  {"id":"eeveespotify","name":"EeveeSpotify Reincarnated","repo":"SideloadLabs/EeveeSpotifyReincarnated","mode":"watch"}
+  {
+    "id": "youmod",
+    "name": "YouMod",
+    "repo": "jaydenjcpy/YouMod",
+    "mode": "ipa",
+    "asset_regex": "(?i)^YouMod[_-].*\\.ipa$",
+    "bundle_id": "com.google.ios.youtube",
+    "category": "entertainment"
+  },
+  {
+    "id": "facebook-plus",
+    "name": "Facebook Plus",
+    "repo": "shajon-dev/Facebook-Plus",
+    "mode": "feed",
+    "community": true,
+    "feed": "https://raw.githubusercontent.com/927tx/IPA-Vault/refs/heads/main/ipavaultsource.json",
+    "feed_name": "Facebook (Facebook Plus)",
+    "bundle_id": "com.facebook.Facebook",
+    "category": "social",
+    "publisher": "IPA Vault",
+    "asset_host": "pub-dd800571175348b6a2745b3396360028.r2.dev",
+    "asset_path_regex": "/Facebook%20Plus%20[^/]+\\.ipa"
+  },
+  {
+    "id": "ytmusicultimate",
+    "name": "YTMusicUltimate",
+    "repo": "dayanch96/YTMusicUltimate",
+    "mode": "feed",
+    "community": true,
+    "feed": "https://raw.githubusercontent.com/mrdrvt99/Altstore-Repository/main/ytmusic.json",
+    "feed_name": "YTMusicUltimate",
+    "bundle_id": "com.google.ios.youtubemusic",
+    "category": "entertainment",
+    "publisher": "mrdrvt99",
+    "asset_host": "github.com",
+    "asset_path_regex": "/mrdrvt99/YTMusicUltimate/releases/download/[^/]+/YTMusicUltimate_[^/]+\\.ipa"
+  },
+  {
+    "id": "eeveespotify",
+    "name": "EeveeSpotify Reincarnated",
+    "repo": "SideloadLabs/EeveeSpotifyReincarnated",
+    "mode": "feed",
+    "feed": "https://raw.githubusercontent.com/SideloadLabs/Eevee-Alt-Source/refs/heads/main/apps.json",
+    "feed_name": "EeveeSpotifyReincarnated",
+    "bundle_id": "com.spotify.client",
+    "category": "entertainment",
+    "publisher": "SideloadLabs (Catbox hosted)",
+    "asset_host": "files.catbox.moe",
+    "asset_path_regex": "/[A-Za-z0-9]+\\.ipa"
+  },
+  {
+    "id": "livecontainer",
+    "name": "LiveContainer",
+    "repo": "LiveContainer/LiveContainer",
+    "mode": "ipa",
+    "asset_regex": "(?i)^(?:LiveContainer|com\\.kdt\\.livecontainer_[\\d.]+)\\.ipa$",
+    "bundle_id": "com.kdt.livecontainer",
+    "category": "utilities"
+  }
 ]

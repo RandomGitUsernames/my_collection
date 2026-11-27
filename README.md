@@ -1,57 +1,35 @@
-# Personal App Updates for AltStore Classic
+# my_collection — personal AltStore source
 
-A small, allowlisted release tracker, not an IPA mirror or a security certification. No paid signing service, personal access token, Apple ID, or GitHub Pages setup is necessary. The public repository contains only code and release metadata, never your personal IPA.
+Existing repo: https://github.com/RandomGitUsernames/my_collection
 
-## Set up once on a Mac
+## Upgrade once
 
-1. Unzip the supplied archive. Create an **empty public repository** called `personal-altstore` at https://github.com/new (do not add a README or license on GitHub). A public repo is required for anonymous AltStore access to the raw JSON. Do not put credentials or personal IPA files in it.
-2. In Terminal, `cd` into the extracted `personal-altstore` directory. Run these commands (replace `YOUR_USERNAME`):
-
-```sh
-git init -b main
-git add .
-git commit -m "Initial personal AltStore source"
-git remote add origin https://github.com/YOUR_USERNAME/personal-altstore.git
-git push -u origin main
-```
-
-Authenticate GitHub normally if prompted (e.g. GitHub CLI or GitHub Desktop). GitHub does not accept your account password for Git HTTPS pushes. If Git requires your name/email, configure those first. Alternatively, use GitHub Desktop to publish the extracted directory as a public repository, ensuring the hidden `.github` directory is included.
-
-3. Open your repository on GitHub → Actions → **Update AltStore source**. If necessary enable workflows, then select **Run workflow** on `main`. The initial push may already have started it. Open `status.json` after the run; this reports each project's result. If the publish step has a permission error, check Settings → Actions → General and repository/organization policies allow the workflow's `contents: write` permission. No personal access token is needed.
-4. Once the first run has completed, open this URL in Safari (replace `YOUR_USERNAME`):
+Unzip the package, open Terminal and run:
 
 ```
-https://raw.githubusercontent.com/YOUR_USERNAME/personal-altstore/main/source.json
+bash ~/Downloads/my_collection_upgrade/install.sh --include-community
 ```
 
-You should see JSON, not a GitHub HTML page, a 404, or a login screen. Confirm there is a YouMod entry under `apps` if the validation passed, plus project entries under `news`. Do not add the GitHub repository homepage itself. Open AltStore Classic → Sources (or Browse → Sources) → + → paste this exact raw URL → Add Source.
+This selects five providers. For a stricter mode use `--developer-only` instead (Facebook Plus and YTMusicUltimate will be release alerts only). The full mode opts into two **third-party compiled IPAs, not audited or guaranteed safe**. The installer clones your existing repository, preserves your current source and unrelated files, replaces the updater and pushes a normal commit. It does not force push or ask for Apple ID credentials. You need Git authentication with permission to update workflows; use your normal GitHub login / GitHub CLI if prompted. The script leaves the checkout for recovery. If push is rejected due to a concurrent update, rerun the installer once that update completes.
 
-## What is automated?
+A push starts the workflow automatically; see https://github.com/RandomGitUsernames/my_collection/actions. `status.json` reports the number of listed and expected apps and errors, if any. The permanent source stays https://raw.githubusercontent.com/RandomGitUsernames/my_collection/main/source.json. Do not remove/re-add it each day. Allow time for GitHub/AltStore caching. The job uses the same 09:23 UTC daily schedule and never installs software on your Mac or phone. To run again manually use Actions → Update AltStore source → Run workflow.
 
-- Daily at 09:23 UTC (03:23 US Central standard time / 04:23 daylight time), and on manual request, GitHub checks the latest stable release from the four allowlisted projects. GitHub schedules may be delayed.
-- YouMod: the updater accepts only one matching IPA under its original GitHub project. It downloads temporarily to inspect metadata, checks the asset size and GitHub-provided SHA-256 (when available), reads actual bundle ID/version/build and privacy descriptions, and uses the macOS codesign utility to inspect entitlements. It does not execute the app or publish its binary. If checks fail, inspect `status.json`; new unvalidated listings are withheld. On API failure, a previous validated listing may be retained and marked stale. Metadata inspection is not malware scanning or signature trust verification.
-- Facebook Plus, YTMusicUltimate and EeveeSpotify: monitor releases and create News entries pointing directly to the original developers. The updater will not download or redistribute their proprietary base IPAs. Build your own personal copy following the developer instructions and import via AltStore's My Apps → +. A public AltStore source cannot fetch a private draft release requiring GitHub authentication.
-- New releases produce unique News entries with notifications requested. AltStore's own background fetching and notification settings determine delivery. If a new tweak release reuses the same app version and build number, AltStore might not show an Update button; use the News link and install manually if needed. Existing manual installs may not link to the source automatically, especially if their original bundle ID differs.
-- The daily GitHub job is separate from the 6 AM LocalDevVPN/AltStore certificate refresh on your phone. App updates are not silently installed. Your current iOS automation remains unchanged.
+## Providers (not security certifications)
 
-## Safety and troubleshooting
+| App | Source of binary | Trust limitation |
+|---|---|---|
+| YouMod | https://github.com/jaydenjcpy/YouMod/releases | Developer release; modified proprietary app |
+| Facebook Plus | https://github.com/927tx/IPA-Vault (exact Facebook Plus listing only) | Opt-in community build, not original developer; version can lag |
+| YTMusicUltimate | https://github.com/mrdrvt99/Altstore-Repository (ytmusic.json) | Opt-in community build, contains additional tweaks |
+| EeveeSpotify | https://github.com/SideloadLabs/Eevee-Alt-Source (unpatched free-cert entry only) | Developer organization feed, external Catbox host; not audited |
+| LiveContainer | https://github.com/LiveContainer/LiveContainer/releases (standalone) | Official project; guest apps share a sandbox, do not use for sensitive accounts |
 
-- `projects.json` is the explicit allowlist. Do not add third-party mirrors just to obtain Facebook IPAs. Public source code and a GitHub release do not prove that a binary is safe or matches source. Review upstream changes and permissions before updating; hashes detect changes, not malicious code.
-- The script rejects unexpected bundle IDs and ambiguous IPA variants. If an upstream changes the expected ID or file naming, review that release before editing the config. Do not blindly bypass the checks. AltStore itself also validates permissions. A signature inspection failure can prevent a listing. The included test suite uses synthetic fixtures and does not test real device installation or Apple signing.
-- `status.json` tells you whether each project succeeded. If the Actions job is red, read its log and status. An empty Browse list means no IPA passed validation, not that the update alerts are missing (check News).
-- If a workflow is disabled after 60 days without repository activity, re-enable it in Actions. The daily status commit is designed to keep the repository active. macOS public runners are subject to GitHub availability and usage policies.
-- To stop monitoring a project, remove it from projects.json and run the workflow. Old News entries remain until they age out (last 40 entries).
-- Do not upload personal or copyrighted base IPA files, Apple credentials, or authentication tokens to this repository. `.gitignore` excludes common sensitive file types but is not a substitute for checking your commit.
+Facebook Plus and YTMusicUltimate upstream explicitly do not distribute ready-made IPAs. To avoid these community binaries you must build personal IPAs from a legitimately obtained decrypted base, using upstream instructions (https://github.com/shajon-dev/Facebook-Plus and https://github.com/dayanch96/YTMusicUltimate). This upgrade does not build or republish proprietary IPAs and does not promise the community builds contain only the named tweak. It does not bypass AltStore permission checks. Community mode is a deliberate compromise on your original developer-only requirement. No aggregator is added to the phone.
 
-## Upstream projects and documentation
+## Checks and limits
 
-- https://github.com/jaydenjcpy/YouMod/releases
-- https://github.com/shajon-dev/Facebook-Plus (personal build instructions; no public IPA)
-- https://github.com/dayanch96/YTMusicUltimate (personal build instructions)
-- https://github.com/SideloadLabs/EeveeSpotifyReincarnated (personal build instructions)
-- https://faq.altstore.io/developers/make-a-source
-- https://faq.altstore.io/developers/updating-apps
+The updater checks selected source URLs, exact app names and bundle IDs, expected download hosts/paths, bounded archive size, real IPA metadata and entitlements, and SHA-256 against GitHub asset digest if present. It never launches downloaded apps. It generates exactly one entry per selected bundle ID. If a provider changes naming/host or metadata checks fail, a previously validated entry may be retained and status is marked failed; if there is no previously validated entry it is omitted. A changing URL or same version/build can prevent AltStore from showing an update; review News. External binary links may change content at the same URL; recorded hashes and metadata checks do not prove authenticity, and a cache hit does not rehash bytes. A successful workflow with five listings is not a malware scan or a guarantee of iOS 27 compatibility. No unapproved automatic fallback is used. To disable community builds later edit `settings.json` to false and rerun.
 
-## Local tests
+Free AltStore has two extra active app slots. Keep YouMod standalone if you need CarPlay; use LiveContainer only if you accept shared guest data. LiveContainer supports sources (see https://livecontainer.github.io/docs/guides/sources); add the same source there if desired, configure its official JIT-less setup, and import apps as guests. CarPlay, notifications, and guest-app updates are not guaranteed. Your 6 AM shortcut renews signed apps and does not install new versions.
 
-`python3 -m unittest discover -s tests -v` (Python 3.9+). Actual IPA entitlement inspection needs macOS, so the scheduled runner is macOS. No third-party Python dependencies.
+Tests: `python3 -m unittest discover -s tests -v`. These use synthetic fixtures, not live downloads or iPhone testing. GitHub's macOS runner performs real metadata inspection on the next workflow run.

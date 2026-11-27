@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['projects.json', 'scripts/**', 'tests/**', '.github/workflows/update.yml']
+    paths: ['projects.json', 'settings.json', 'scripts/**', 'tests/**', '.github/workflows/update.yml']
   schedule:
     - cron: '23 9 * * *'
 permissions:
@@ -14,7 +14,7 @@ concurrency:
 jobs:
   update:
     runs-on: macos-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Test generator

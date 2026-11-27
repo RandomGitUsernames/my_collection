@@ -69,11 +69,11 @@ def download(asset, target):
             raise ValueError('Non-HTTPS redirect')
         while chunk := response.read(1024 * 1024):
             count += len(chunk)
-            if count > min(MAX_IPA, asset['size']):
+            if count > (MAX_IPA if asset.get('approximate_size') else min(MAX_IPA, asset['size'])):
                 raise ValueError('Download exceeds expected size')
             sha.update(chunk)
             out.write(chunk)
-    if count != asset['size']:
+    if not count or (not asset.get('approximate_size') and count != asset['size']):
         raise ValueError('Incomplete download')
     digest = 'sha256:' + sha.hexdigest()
     if asset.get('digest') and asset['digest'] != digest:
@@ -138,15 +138,15 @@ def app_from_ipa(project, release, asset, info, permissions, digest):
                'localizedDescription': f"Upstream release {release['tag_name']}. SHA-256: {digest.removeprefix('sha256:')}"}
     if info.get('MinimumOSVersion'):
         version['minOSVersion'] = str(info['MinimumOSVersion'])
-    return {'name': project['name'], 'bundleIdentifier': bundle, 'developerName': project['repo'].split('/')[0],
-            'localizedDescription': f"Unofficial modified app. Original project: https://github.com/{project['repo']}. Not independently security audited.",
+    return {'name': project['name'], 'bundleIdentifier': bundle, 'developerName': project.get('publisher', project['repo'].split('/')[0]),
+            'localizedDescription': f"Original project: https://github.com/{project['repo']}. Binary provider: {project.get('publisher', project['repo'])}. " + ("Community-packaged IPA, not an original developer build. " if project.get("community") else "") + "Not independently security audited.",
             'iconURL': 'https://github.com/' + project['repo'].split('/')[0] + '.png', 'category': project['category'],
             'versions': [version], 'appPermissions': permissions}
 
 
 def news_item(project, release):
     tag = release['tag_name']
-    caption = ('New upstream release. Open GitHub to review the changes.' if project['mode'] == 'ipa'
+    caption = ('New upstream release. Open GitHub to review the changes.' if project['mode'] in ('ipa','feed')
                else 'New tweak release. Open GitHub to build your own IPA; no public IPA is supplied here.')
     return {'title': f"{project['name']}: {tag}"[:150],
             'identifier': project['id'] + '-' + str(release['id']), 'caption': caption,
@@ -166,65 +166,101 @@ def validate(source):
         assert app['versions'] and isinstance(app['appPermissions'], dict)
         for v in app['versions']:
             assert all(isinstance(v[k], str) and v[k] for k in ('version','buildVersion','date','downloadURL'))
-            assert v['size'] > 0 and v['downloadURL'].startswith('https://github.com/')
+            assert v['size'] > 0 and urllib.parse.urlsplit(v['downloadURL']).scheme == 'https'
             dt.datetime.fromisoformat(v['date'].replace('Z', '+00:00'))
     for n in source['news']:
         assert all(isinstance(n[k], str) and n[k] for k in ('title','identifier','caption','date','url'))
         dt.datetime.fromisoformat(n['date'].replace('Z', '+00:00'))
 
 
+def feed_asset(project, data):
+    # Match both exact name and exact bundle identifier, never just one of them.
+    matches = [a for a in data['apps'] if a.get('name') == project['feed_name'] and a.get('bundleIdentifier') == project['bundle_id']]
+    if len(matches) != 1:
+        raise ValueError(f'Expected one exact feed entry, got {len(matches)}')
+    a = matches[0]
+    v = a['versions'][0] if a.get('versions') else a
+    url = v['downloadURL']
+    u = urllib.parse.urlsplit(url)
+    if u.scheme != 'https' or u.netloc != project['asset_host'] or not re.fullmatch(project['asset_path_regex'], u.path) or u.query or u.fragment:
+        raise ValueError('Download URL is outside approved provider/path')
+    date = v.get('date') or a['versionDate']
+    if len(date) == 10: date += 'T00:00:00Z'
+    dt.datetime.fromisoformat(date.replace('Z','+00:00'))
+    size = v.get('size', a.get('size'))
+    if not isinstance(size, int) or not 0 < size <= MAX_IPA:
+        raise ValueError('Invalid reported IPA size')
+    tag = str(v.get('version',a.get('version','unknown')))
+    identity = hashlib.sha256(json.dumps([url,date,tag,size,v.get('localizedDescription'),a.get('localizedDescription')],sort_keys=True).encode()).hexdigest()
+    return ({'id':identity,'tag_name':tag,'published_at':date},
+            {'id':identity,'browser_download_url':url,'size':size,'updated_at':date,'approximate_size':True})
+
+
+def get_feed(project):
+    req=urllib.request.Request(project['feed'],headers={'User-Agent':'personal-altstore-source','Cache-Control':'no-cache'})
+    with urllib.request.urlopen(req,timeout=45) as response:
+        if urllib.parse.urlsplit(response.geturl()).netloc != 'raw.githubusercontent.com':
+            raise ValueError('Unexpected feed redirect')
+        data=response.read(12*1024*1024+1)
+    if len(data)>12*1024*1024: raise ValueError('Feed too large')
+    return feed_asset(project,json.loads(data))
+
+
 def main():
     projects = load('projects.json')
-    old = load('source.json')
+    settings = load('settings.json', {'include_community':False})
+    old = load('source.json', {'name':'Personal App Updates','identifier':'org.personalappupdates.source','apps':[],'news':[]})
     cache = load('asset-cache.json', {})
     old_apps = {a['bundleIdentifier']: a for a in old['apps']}
     news = {n['identifier']: n for n in old['news']}
     apps, status, next_cache = [], [], {}
     for p in projects:
-        row = {'project': p['name'], 'repo': p['repo']}
+        row = {'project': p['name'], 'repo': p['repo'], 'publisher':p.get('publisher',p['repo'])}
         release = None
+        enabled = not p.get('community') or settings.get('include_community') is True
         try:
-            release = get_release(p['repo'])
-            row.update(tag=release['tag_name'], release_url=f"https://github.com/{p['repo']}/releases", mode=p['mode'])
-            item = news_item(p, release)
-            news[item['identifier']] = item
-            if p['mode'] == 'watch':
-                row['status'] = 'Release monitored; personal IPA build required'
+            if not enabled:
+                release = get_release(p['repo'])
+                row['status']='Community build disabled; personal IPA required'
+                row['tag']=release['tag_name']
+                item=news_item({**p,'mode':'watch'},release)
+                news[item['identifier']]=item
+                status.append(row); print(p['name'],row['status']); continue
+            if p['mode']=='feed':
+                release,asset = get_feed(p)
             else:
-                asset = choose_asset(p, release)
-                identity = [p['repo'], release['id'], asset['id'], asset.get('digest'), asset['size'], asset['updated_at'], p['bundle_id']]
-                previous = old_apps.get(p['bundle_id'])
-                if previous and cache.get(p['id']) == identity:
-                    app = previous
-                else:
-                    with tempfile.TemporaryDirectory() as tmp:
-                        ipa = pathlib.Path(tmp) / 'app.ipa'
-                        digest = download(asset, ipa)
-                        info, permissions = inspect_ipa(ipa)
-                        app = app_from_ipa(p, release, asset, info, permissions, digest)
-                apps.append(app)
-                next_cache[p['id']] = identity
-                row['status'] = 'IPA listed; metadata inspected, not security audited'
-                if previous and previous['versions'][0]['version'] == app['versions'][0]['version'] and previous['versions'][0]['buildVersion'] == app['versions'][0]['buildVersion'] and cache.get(p['id']) != identity:
-                    row['note'] = 'New tweak release may have same app version/build; AltStore may not show Update. Use News.'
+                release = get_release(p['repo'])
+                asset = choose_asset(p,release)
+            row.update(tag=release['tag_name'],mode=p['mode'])
+            identity = [p['repo'], release['id'], asset['id'], asset.get('digest'), asset['size'], asset.get('updated_at'), p['bundle_id'],asset['browser_download_url']]
+            previous = old_apps.get(p['bundle_id'])
+            if previous and cache.get(p['id']) == identity:
+                app=previous
+            else:
+                with tempfile.TemporaryDirectory() as tmp:
+                    ipa = pathlib.Path(tmp) / 'app.ipa'
+                    digest = download(asset, ipa)
+                    info, permissions = inspect_ipa(ipa)
+                    app = app_from_ipa(p, release, {**asset,'size':ipa.stat().st_size}, info, permissions, digest)
+            apps.append(app); next_cache[p['id']]=identity
+            row['status']='IPA listed; metadata inspected, not security audited'
+            item=news_item(p,release)
+            if p['mode']=='feed':
+                item['url']=p['feed']; item['caption']='New build indexed from '+p['publisher']+'. Review source and permissions before installing.'
+            news[item['identifier']]=item
+            if previous and previous['versions'][0]['version'] == app['versions'][0]['version'] and previous['versions'][0]['buildVersion'] == app['versions'][0]['buildVersion'] and cache.get(p['id']) != identity:
+                row['note']='Same version/build: AltStore may not offer Update. Check News.'
         except Exception as exc:
-            row['status'] = 'Check failed: ' + str(exc)[:350]
-            # Preserve the last successful app only on API/network failure before we learn about a new release.
-            if release is None and p['mode'] == 'ipa' and p['bundle_id'] in old_apps:
-                apps.append(old_apps[p['bundle_id']]); next_cache[p['id']] = cache.get(p['id'])
-                row['note'] = 'Last successfully checked listing retained; may be stale.'
-        status.append(row)
-        print(p['name'], row['status'])
-    source = {**old, 'apps': apps, 'news': sorted(news.values(), key=lambda n:n['date'], reverse=True)[:40]}
+            row['status']='Check failed: '+str(exc)[:350]
+            if enabled and p['bundle_id'] in old_apps and cache.get(p['id']):
+                apps.append(old_apps[p['bundle_id']]); next_cache[p['id']]=cache[p['id']]
+                row['note']='Previous validated listing retained; may be stale. New asset not published.'
+        status.append(row); print(p['name'],row['status'])
+    source={**old,'subtitle':'Selected developer and opt-in community builds','description':'Curated direct links; not a security audit. Community builds are labelled.','apps':apps,'news':sorted(news.values(),key=lambda n:n['date'],reverse=True)[:40]}
     validate(source)
-    save('source.json', source)
-    save('asset-cache.json', next_cache)
-    save('status.json', {'checked_at': dt.datetime.now(dt.timezone.utc).isoformat(), 'projects': status})
-    # The workflow commits the status even if one upstream failed, then signals failure separately.
-    if any(r['status'].startswith('Check failed') for r in status):
-        return 1
-    return 0
+    save('source.json',source); save('asset-cache.json',next_cache)
+    save('status.json',{'checked_at':dt.datetime.now(dt.timezone.utc).isoformat(),'projects':status,'installable_count':len(apps),'expected_count':sum(not p.get('community') or settings.get('include_community') is True for p in projects)})
+    return int(any(r['status'].startswith('Check failed') for r in status))
 
-
-if __name__ == '__main__':
+if __name__=='__main__':
     raise SystemExit(main())

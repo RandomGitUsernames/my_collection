@@ -37,11 +37,11 @@ class Tests(unittest.TestCase):
     def test_wrong_bundle(self):
         with self.assertRaises(ValueError): app_from_ipa(P,R,A,{**INFO,'CFBundleIdentifier':'wrong'},{},'sha256:fake')
     def test_watch_news(self):
-        item=news_item(load('projects.json')[1],R)
+        item=news_item({**load('projects.json')[1],'mode':'watch'},R)
         self.assertIn('build your own IPA', item['caption'])
         validate({'name':'test','apps':[],'news':[item]})
         with self.assertRaises(ValueError): validate({'name':'test','apps':[],'news':[item,item]})
     def test_seed(self):
-        validate(load('source.json'))
+        validate(load('source.json', {'name':'test','apps':[],'news':[]}))
 
 if __name__=='__main__': unittest.main()
