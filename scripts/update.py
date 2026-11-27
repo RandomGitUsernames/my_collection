@@ -242,13 +242,18 @@ def facebook_entries(project, data):
             description=' '.join(str(x) for x in (a.get('developerName',''),a.get('localizedDescription',''),v.get('localizedDescription',''),v.get('versionDescription',''))).lower()
             if 'ipavault' not in description and 'ipa vault' not in description: continue
             url=v.get('downloadURL',''); u=urllib.parse.urlsplit(url)
-            # Retain the original publisher's storage host, rather than trusting an opaque mirror.
-            if u.scheme != 'https' or u.netloc != project['asset_host'] or u.query or u.fragment: continue
+            # Accept the original storage or the explicitly approved IPA Vault route on FastSign.
+            if u.scheme != 'https' or u.query or u.fragment: continue
             path=urllib.parse.unquote(u.path)
-            if not re.fullmatch(r'/[^/]*facebook[^/]*\.ipa',path,re.I) or 'plus' not in path.lower(): continue
+            if u.netloc == project['asset_host']:
+                if not re.fullmatch(r'/[^/]*facebook[^/]*\.ipa',path,re.I) or 'plus' not in path.lower(): continue
+            elif u.netloc == project.get('mirror_asset_host'):
+                if not re.fullmatch(r'/d/[A-Za-z0-9]+/ipavault/[0-9]+-Facebook Plus [0-9.]+ \(FB [0-9.]+\) \[@ipavault\]\.ipa',path,re.I): continue
+            else:
+                continue
             try:
                 row={**a, 'versions':[v]}
-                rule={**project,'feed_name':name,'asset_path_regex':re.escape(u.path)}
+                rule={**project,'feed_name':name,'asset_host':u.netloc,'asset_path_regex':re.escape(u.path)}
                 release,asset=feed_asset(rule,{'apps':[row]})
                 candidates.append((release,asset))
             except (ValueError,KeyError,TypeError): continue
@@ -257,7 +262,7 @@ def facebook_entries(project, data):
     for r,a in candidates:
         if a['browser_download_url'] not in seen:
             unique.append((r,a)); seen.add(a['browser_download_url'])
-    if not unique: raise ValueError('No matching IPA Vault Facebook Plus file on approved host in mirror index')
+    if not unique: raise ValueError('No matching IPA Vault Facebook Plus file on either approved host in mirror index')
     return unique[:4]
 
 

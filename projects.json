@@ -24,9 +24,10 @@
     "fallbacks": [
       {
         "mode": "facebook_mirror",
-        "publisher": "IPA Vault (indexed by FastSign)",
+        "publisher": "IPA Vault (FastSign mirror)",
         "feed": "https://fastsign.dev/repo.json",
-        "community": true
+        "community": true,
+        "mirror_asset_host": "fastsign.dev"
       }
     ]
   },

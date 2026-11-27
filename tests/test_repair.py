@@ -13,6 +13,13 @@ class RepairTests(unittest.TestCase):
         a={'name':'Facebook (Plus 1.0.9)','bundleIdentifier':p['bundle_id'],'localizedDescription':'Build by @ipavault','version':'588.1.0','versionDate':'2026-11-22','size':100,'downloadURL':'https://'+p['asset_host']+'/Facebook%20Plus%20new.ipa'}
         self.assertEqual(len(u.facebook_entries(p,{'apps':[a,{**a,'downloadURL':'https://unknown.example/FacebookPlus.ipa'},{**a,'name':'Facebook (iQFace)'},{**a,'localizedDescription':'unknown'}]})),1)
         with self.assertRaises(ValueError): u.facebook_entries(p,{'apps':[{**a,'localizedDescription':'unknown'}]})
+    def test_facebook_fastsign_approved_route(self):
+        p={**P['facebook-plus'],**P['facebook-plus']['fallbacks'][0]}
+        url='https://fastsign.dev/d/5ryem9u3/ipavault/1574-Facebook%20Plus%201.1.1%20%28FB%20588.1.0%29%20%5B%40ipavault%5D.ipa'
+        a={'name':'Facebook (Plus 1.1.1)','bundleIdentifier':p['bundle_id'],'localizedDescription':'Build by @ipavault','version':'588.1.0','versionDate':'2026-11-27','size':230600000,'downloadURL':url}
+        self.assertEqual(u.facebook_entries(p,{'apps':[a]})[0][1]['browser_download_url'],url)
+        for bad in [url.replace('/ipavault/','/other/'),url.replace('fastsign.dev','example.com'),url.replace('Facebook%20Plus','Facebook%20iQFace')]:
+            with self.assertRaises(ValueError): u.facebook_entries(p,{'apps':[{**a,'downloadURL':bad}]})
     def test_fallback_after_primary_failure(self):
         p=P['eeveespotify']; release={'id':1,'tag_name':'test','published_at':'2026-11-27T00:00:00Z'}; asset={'id':2,'size':1,'browser_download_url':'https://github.com/estrogencat/EeveeIPA/releases/download/a/b.ipa'}
         info={'CFBundleIdentifier':p['bundle_id'],'CFBundleShortVersionString':'9.2.2','CFBundleVersion':'1'}
