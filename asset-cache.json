@@ -6,6 +6,27 @@
     "sha256:9c35592ce9f7bea31cd995b25a31c4bb1c1eb739dd4818eafb79cf0213f09447",
     130616843,
     "2026-09-28T10:18:26Z",
-    "com.google.ios.youtube"
+    "com.google.ios.youtube",
+    "https://github.com/jaydenjcpy/YouMod/releases/download/youmod-ipa37/YouMod_21.39.4_v2.0.0.ipa"
+  ],
+  "ytmusicultimate": [
+    "dayanch96/YTMusicUltimate",
+    "0c259b4b323403f7a57052dc3b49d1f3e1ac373eff032e9303a0810f0d1b3719",
+    "0c259b4b323403f7a57052dc3b49d1f3e1ac373eff032e9303a0810f0d1b3719",
+    null,
+    109060371,
+    "2026-11-23T02:41:12Z",
+    "com.google.ios.youtubemusic",
+    "https://github.com/mrdrvt99/YTMusicUltimate/releases/download/ytmu-ipa46/YTMusicUltimate_9.47.2_2.4.1.ipa"
+  ],
+  "livecontainer": [
+    "LiveContainer/LiveContainer",
+    348463764,
+    480113563,
+    "sha256:b6fea95e30083382e29ffef88fa1aaa40b5069e1112e5307d490dab04648bba6",
+    4707271,
+    "2026-07-17T07:44:09Z",
+    "com.kdt.livecontainer",
+    "https://github.com/LiveContainer/LiveContainer/releases/download/3.8.0/LiveContainer.ipa"
   ]
 }

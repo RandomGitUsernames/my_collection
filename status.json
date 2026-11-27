@@ -1,37 +1,48 @@
 {
-  "checked_at": "2026-11-27T07:46:21.765625+00:00",
+  "checked_at": "2026-11-27T07:57:27.751419+00:00",
   "projects": [
     {
       "project": "YouMod",
       "repo": "jaydenjcpy/YouMod",
+      "publisher": "jaydenjcpy/YouMod",
       "tag": "youmod-ipa37",
-      "release_url": "https://github.com/jaydenjcpy/YouMod/releases",
       "mode": "ipa",
-      "status": "IPA listed; metadata inspected, not security audited"
+      "status": "IPA listed; metadata inspected, not security audited",
+      "note": "Same version/build: AltStore may not offer Update. Check News."
     },
     {
       "project": "Facebook Plus",
       "repo": "shajon-dev/Facebook-Plus",
-      "tag": "v1.1.1",
-      "release_url": "https://github.com/shajon-dev/Facebook-Plus/releases",
-      "mode": "watch",
-      "status": "Release monitored; personal IPA build required"
+      "publisher": "IPA Vault",
+      "tag": "586.0.0",
+      "mode": "feed",
+      "status": "Check failed: HTTP Error 404: Not Found"
     },
     {
       "project": "YTMusicUltimate",
       "repo": "dayanch96/YTMusicUltimate",
-      "tag": "v2.4.1",
-      "release_url": "https://github.com/dayanch96/YTMusicUltimate/releases",
-      "mode": "watch",
-      "status": "Release monitored; personal IPA build required"
+      "publisher": "mrdrvt99",
+      "tag": "9.47.2",
+      "mode": "feed",
+      "status": "IPA listed; metadata inspected, not security audited"
     },
     {
       "project": "EeveeSpotify Reincarnated",
       "repo": "SideloadLabs/EeveeSpotifyReincarnated",
-      "tag": "v7.5.0",
-      "release_url": "https://github.com/SideloadLabs/EeveeSpotifyReincarnated/releases",
-      "mode": "watch",
-      "status": "Release monitored; personal IPA build required"
+      "publisher": "SideloadLabs (Catbox hosted)",
+      "tag": "9.2.0",
+      "mode": "feed",
+      "status": "Check failed: Incomplete download"
+    },
+    {
+      "project": "LiveContainer",
+      "repo": "LiveContainer/LiveContainer",
+      "publisher": "LiveContainer/LiveContainer",
+      "tag": "3.8.0",
+      "mode": "ipa",
+      "status": "IPA listed; metadata inspected, not security audited"
     }
-  ]
+  ],
+  "installable_count": 3,
+  "expected_count": 5
 }

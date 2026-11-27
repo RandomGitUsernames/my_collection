@@ -1,8 +1,8 @@
 {
   "name": "Personal App Updates",
   "identifier": "org.personalappupdates.source",
-  "subtitle": "Selected original GitHub projects",
-  "description": "Direct release links and update alerts. Not a security audit.",
+  "subtitle": "Selected developer and opt-in community builds",
+  "description": "Curated direct links; not a security audit. Community builds are labelled.",
   "iconURL": "https://github.com/github.png",
   "tintColor": "#2563EB",
   "apps": [
@@ -10,7 +10,7 @@
       "name": "YouMod",
       "bundleIdentifier": "com.google.ios.youtube",
       "developerName": "jaydenjcpy",
-      "localizedDescription": "Unofficial modified app. Original project: https://github.com/jaydenjcpy/YouMod. Not independently security audited.",
+      "localizedDescription": "Original project: https://github.com/jaydenjcpy/YouMod. Binary provider: jaydenjcpy/YouMod. Not independently security audited.",
       "iconURL": "https://github.com/jaydenjcpy.png",
       "category": "entertainment",
       "versions": [
@@ -56,6 +56,104 @@
           "NSUserTrackingUsageDescription": "To personalize ads and provide ad measurement, YouTube will link activity from this app with activity from non-Google apps and websites."
         }
       }
+    },
+    {
+      "name": "YTMusicUltimate",
+      "bundleIdentifier": "com.google.ios.youtubemusic",
+      "developerName": "mrdrvt99",
+      "localizedDescription": "Original project: https://github.com/dayanch96/YTMusicUltimate. Binary provider: mrdrvt99. Community-packaged IPA, not an original developer build. Not independently security audited.",
+      "iconURL": "https://github.com/dayanch96.png",
+      "category": "entertainment",
+      "versions": [
+        {
+          "version": "9.47.2",
+          "buildVersion": "9.47.2",
+          "date": "2026-11-23T02:41:12Z",
+          "downloadURL": "https://github.com/mrdrvt99/YTMusicUltimate/releases/download/ytmu-ipa46/YTMusicUltimate_9.47.2_2.4.1.ipa",
+          "size": 109060371,
+          "localizedDescription": "Upstream release 9.47.2. SHA-256: dc0fbc91fc688688a6257d8bbb6aba441256b060daf76b161a814d925da92f2a",
+          "minOSVersion": "17.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {
+          "NSBluetoothAlwaysUsageDescription": "YouTube Music uses Bluetooth to locate and connect to Chromecast and other devices.",
+          "NSBluetoothPeripheralUsageDescription": "YouTube Music uses Bluetooth to locate and connect to Chromecast and other devices.",
+          "NSCameraUsageDescription": "To take a profile picture, allow YouTube Music to access your camera.",
+          "NSContactsUsageDescription": "This will allow you to invite your family into your membership plan.",
+          "NSLocalNetworkUsageDescription": "Access to your network allows YouTube Music to discover and connect to devices such as your TV.",
+          "NSMicrophoneUsageDescription": "This lets you include audio with your videos.",
+          "NSPhotoLibraryAddUsageDescription": "To save images, allow YouTube Music to access your photo library.",
+          "NSPhotoLibraryUsageDescription": "To choose a profile picture, allow YouTube Music to access your photos."
+        }
+      }
+    },
+    {
+      "name": "LiveContainer",
+      "bundleIdentifier": "com.kdt.livecontainer",
+      "developerName": "LiveContainer",
+      "localizedDescription": "Original project: https://github.com/LiveContainer/LiveContainer. Binary provider: LiveContainer/LiveContainer. Not independently security audited.",
+      "iconURL": "https://github.com/LiveContainer.png",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "3.8.0",
+          "buildVersion": "3.8.0",
+          "date": "2026-07-17T07:44:20Z",
+          "downloadURL": "https://github.com/LiveContainer/LiveContainer/releases/download/3.8.0/LiveContainer.ipa",
+          "size": 4707271,
+          "localizedDescription": "Upstream release 3.8.0. SHA-256: b6fea95e30083382e29ffef88fa1aaa40b5069e1112e5307d490dab04648bba6",
+          "minOSVersion": "15.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "application-identifier",
+          "com.apple.developer.healthkit",
+          "com.apple.developer.healthkit.access",
+          "com.apple.developer.healthkit.background-delivery",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "com.apple.developer.team-identifier",
+          "com.apple.security.application-groups",
+          "get-task-allow",
+          "keychain-access-groups"
+        ],
+        "privacy": {
+          "NFCReaderUsageDescription": "The guest app is requesting for this permission.",
+          "NSAppleMusicUsageDescription": "The guest app is requesting for this permission.",
+          "NSBluetoothAlwaysUsageDescription": "The guest app is requesting for this permission.",
+          "NSBluetoothPeripheralUsageDescription": "The guest app is requesting for this permission.",
+          "NSCalendarsFullAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSCalendarsWriteOnlyAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSCameraUsageDescription": "The guest app is requesting for this permission.",
+          "NSContactsUsageDescription": "The guest app is requesting for this permission.",
+          "NSFaceIDUsageDescription": "The guest app is requesting for this permission.",
+          "NSFallDetectionUsageDescription": "The guest app is requesting for this permission.",
+          "NSGKFriendListUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthClinicalHealthRecordsShareUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthShareUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthUpdateUsageDescription": "The guest app is requesting for this permission.",
+          "NSHomeKitUsageDescription": "The guest app is requesting for this permission.",
+          "NSIdentityUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocalNetworkUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationAlwaysAndWhenInUseUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationTemporaryUsageDescriptionDictionary": "The guest app is requesting for this permission.",
+          "NSLocationUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationWhenInUseUsageDescription": "The guest app is requesting for this permission.",
+          "NSMicrophoneUsageDescription": "The guest app is requesting for this permission.",
+          "NSMotionUsageDescription": "The guest app is requesting for this permission.",
+          "NSNearbyInteractionAllowOnceUsageDescription": "The guest app is requesting for this permission.",
+          "NSNearbyInteractionUsageDescription": "The guest app is requesting for this permission.",
+          "NSPhotoLibraryAddUsageDescription": "The guest app is requesting for this permission.",
+          "NSPhotoLibraryUsageDescription": "The guest app is requesting for this permission.",
+          "NSRemindersFullAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSSensorKitUsageDescription": "The guest app is requesting for this permission.",
+          "NSSiriUsageDescription": "The guest app is requesting for this permission.",
+          "NSSpeechRecognitionUsageDescription": "The guest app is requesting for this permission.",
+          "NSUserTrackingUsageDescription": "The guest app is requesting for this permission."
+        }
+      }
     }
   ],
   "news": [
@@ -66,6 +164,14 @@
       "date": "2026-11-26T15:55:36Z",
       "notify": true,
       "url": "https://github.com/shajon-dev/Facebook-Plus/releases/tag/v1.1.1"
+    },
+    {
+      "title": "YTMusicUltimate: 9.47.2",
+      "identifier": "ytmusicultimate-0c259b4b323403f7a57052dc3b49d1f3e1ac373eff032e9303a0810f0d1b3719",
+      "caption": "New build indexed from mrdrvt99. Review source and permissions before installing.",
+      "date": "2026-11-23T02:41:12Z",
+      "notify": true,
+      "url": "https://raw.githubusercontent.com/mrdrvt99/Altstore-Repository/main/ytmusic.json"
     },
     {
       "title": "EeveeSpotify Reincarnated: v7.5.0",
@@ -82,6 +188,14 @@
       "date": "2026-09-28T10:18:42Z",
       "notify": true,
       "url": "https://github.com/jaydenjcpy/YouMod/releases/tag/youmod-ipa37"
+    },
+    {
+      "title": "LiveContainer: 3.8.0",
+      "identifier": "livecontainer-348463764",
+      "caption": "New upstream release. Open GitHub to review the changes.",
+      "date": "2026-07-17T07:44:20Z",
+      "notify": true,
+      "url": "https://github.com/LiveContainer/LiveContainer/releases/tag/3.8.0"
     },
     {
       "title": "YTMusicUltimate: v2.4.1",
