@@ -9,6 +9,16 @@
     "com.google.ios.youtube",
     "https://github.com/jaydenjcpy/YouMod/releases/download/youmod-ipa37/YouMod_21.39.4_v2.0.0.ipa"
   ],
+  "facebook-plus": [
+    "shajon-dev/Facebook-Plus",
+    "c673e680fa57e313e0c141c67c8fe6925f3f3cce79e9cfbcce0338f22ab2cae7",
+    "c673e680fa57e313e0c141c67c8fe6925f3f3cce79e9cfbcce0338f22ab2cae7",
+    null,
+    241793506,
+    "2026-11-27T00:00:00Z",
+    "com.facebook.Facebook",
+    "https://fastsign.dev/d/5ryem9u3/ipavault/1574-Facebook%20Plus%201.1.1%20%28FB%20588.1.0%29%20%5B@ipavault%5D.ipa"
+  ],
   "ytmusicultimate": [
     "dayanch96/YTMusicUltimate",
     "0c259b4b323403f7a57052dc3b49d1f3e1ac373eff032e9303a0810f0d1b3719",
