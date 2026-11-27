@@ -1,0 +1,10 @@
+{
+  "name": "Personal App Updates",
+  "identifier": "org.personalappupdates.source",
+  "subtitle": "Selected original GitHub projects",
+  "description": "Direct release links and update alerts. Not a security audit.",
+  "iconURL": "https://github.com/github.png",
+  "tintColor": "#2563EB",
+  "apps": [],
+  "news": []
+}

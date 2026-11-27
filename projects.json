@@ -1,0 +1,6 @@
+[
+  {"id":"youmod","name":"YouMod","repo":"jaydenjcpy/YouMod","mode":"ipa","asset_regex":"(?i)^YouMod[_-].*\\.ipa$","bundle_id":"com.google.ios.youtube","category":"entertainment"},
+  {"id":"facebook-plus","name":"Facebook Plus","repo":"shajon-dev/Facebook-Plus","mode":"watch"},
+  {"id":"ytmusicultimate","name":"YTMusicUltimate","repo":"dayanch96/YTMusicUltimate","mode":"watch"},
+  {"id":"eeveespotify","name":"EeveeSpotify Reincarnated","repo":"SideloadLabs/EeveeSpotifyReincarnated","mode":"watch"}
+]
