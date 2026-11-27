@@ -1,1 +1,37 @@
-{"checked_at":null,"projects":[]}
+{
+  "checked_at": "2026-11-27T07:46:21.765625+00:00",
+  "projects": [
+    {
+      "project": "YouMod",
+      "repo": "jaydenjcpy/YouMod",
+      "tag": "youmod-ipa37",
+      "release_url": "https://github.com/jaydenjcpy/YouMod/releases",
+      "mode": "ipa",
+      "status": "IPA listed; metadata inspected, not security audited"
+    },
+    {
+      "project": "Facebook Plus",
+      "repo": "shajon-dev/Facebook-Plus",
+      "tag": "v1.1.1",
+      "release_url": "https://github.com/shajon-dev/Facebook-Plus/releases",
+      "mode": "watch",
+      "status": "Release monitored; personal IPA build required"
+    },
+    {
+      "project": "YTMusicUltimate",
+      "repo": "dayanch96/YTMusicUltimate",
+      "tag": "v2.4.1",
+      "release_url": "https://github.com/dayanch96/YTMusicUltimate/releases",
+      "mode": "watch",
+      "status": "Release monitored; personal IPA build required"
+    },
+    {
+      "project": "EeveeSpotify Reincarnated",
+      "repo": "SideloadLabs/EeveeSpotifyReincarnated",
+      "tag": "v7.5.0",
+      "release_url": "https://github.com/SideloadLabs/EeveeSpotifyReincarnated/releases",
+      "mode": "watch",
+      "status": "Release monitored; personal IPA build required"
+    }
+  ]
+}

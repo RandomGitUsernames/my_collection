@@ -5,6 +5,91 @@
   "description": "Direct release links and update alerts. Not a security audit.",
   "iconURL": "https://github.com/github.png",
   "tintColor": "#2563EB",
-  "apps": [],
-  "news": []
+  "apps": [
+    {
+      "name": "YouMod",
+      "bundleIdentifier": "com.google.ios.youtube",
+      "developerName": "jaydenjcpy",
+      "localizedDescription": "Unofficial modified app. Original project: https://github.com/jaydenjcpy/YouMod. Not independently security audited.",
+      "iconURL": "https://github.com/jaydenjcpy.png",
+      "category": "entertainment",
+      "versions": [
+        {
+          "version": "21.39.4",
+          "buildVersion": "21.39.4",
+          "date": "2026-09-28T10:18:42Z",
+          "downloadURL": "https://github.com/jaydenjcpy/YouMod/releases/download/youmod-ipa37/YouMod_21.39.4_v2.0.0.ipa",
+          "size": 130616843,
+          "localizedDescription": "Upstream release youmod-ipa37. SHA-256: 9c35592ce9f7bea31cd995b25a31c4bb1c1eb739dd4818eafb79cf0213f09447",
+          "minOSVersion": "17.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "application-identifier",
+          "aps-environment",
+          "com.apple.developer.associated-domains",
+          "com.apple.developer.coremedia.allow-alternate-video-decoder-selection",
+          "com.apple.developer.declared-age-range",
+          "com.apple.developer.device-information.user-assigned-device-name",
+          "com.apple.developer.group-session",
+          "com.apple.developer.networking.multicast",
+          "com.apple.developer.networking.wifi-info",
+          "com.apple.developer.siri",
+          "com.apple.developer.storekit.request-data",
+          "com.apple.developer.team-identifier",
+          "com.apple.developer.usernotifications.communication",
+          "com.apple.developer.usernotifications.time-sensitive",
+          "com.apple.security.application-groups",
+          "get-task-allow",
+          "keychain-access-groups"
+        ],
+        "privacy": {
+          "NSAppleMusicUsageDescription": "This lets you add your own audio files to your videos.",
+          "NSBluetoothPeripheralUsageDescription": "YouTube needs bluetooth access to scan for nearby Cast devices.",
+          "NSCameraUsageDescription": "This lets you create videos using the app.",
+          "NSContactsUsageDescription": "Your contacts will be sent to YouTube servers to help you find friends to share videos with.",
+          "NSLocalNetworkUsageDescription": "Access to your network allows YouTube to discover and connect to devices such as your TV.",
+          "NSLocationWhenInUseUsageDescription": "This enables local content discovery, improved recommendations, and enhanced search results.",
+          "NSMicrophoneUsageDescription": "This lets you include audio with your videos and search using your voice.",
+          "NSPhotoLibraryUsageDescription": "This lets you upload media you've already created.",
+          "NSUserTrackingUsageDescription": "To personalize ads and provide ad measurement, YouTube will link activity from this app with activity from non-Google apps and websites."
+        }
+      }
+    }
+  ],
+  "news": [
+    {
+      "title": "Facebook Plus: v1.1.1",
+      "identifier": "facebook-plus-459622348",
+      "caption": "New tweak release. Open GitHub to build your own IPA; no public IPA is supplied here.",
+      "date": "2026-11-26T15:55:36Z",
+      "notify": true,
+      "url": "https://github.com/shajon-dev/Facebook-Plus/releases/tag/v1.1.1"
+    },
+    {
+      "title": "EeveeSpotify Reincarnated: v7.5.0",
+      "identifier": "eeveespotify-446112598",
+      "caption": "New tweak release. Open GitHub to build your own IPA; no public IPA is supplied here.",
+      "date": "2026-11-15T17:32:35Z",
+      "notify": true,
+      "url": "https://github.com/SideloadLabs/EeveeSpotifyReincarnated/releases/tag/v7.5.0"
+    },
+    {
+      "title": "YouMod: youmod-ipa37",
+      "identifier": "youmod-398140435",
+      "caption": "New upstream release. Open GitHub to review the changes.",
+      "date": "2026-09-28T10:18:42Z",
+      "notify": true,
+      "url": "https://github.com/jaydenjcpy/YouMod/releases/tag/youmod-ipa37"
+    },
+    {
+      "title": "YTMusicUltimate: v2.4.1",
+      "identifier": "ytmusicultimate-298801950",
+      "caption": "New tweak release. Open GitHub to build your own IPA; no public IPA is supplied here.",
+      "date": "2026-03-19T06:29:14Z",
+      "notify": true,
+      "url": "https://github.com/dayanch96/YTMusicUltimate/releases/tag/v2.4.1"
+    }
+  ]
 }
